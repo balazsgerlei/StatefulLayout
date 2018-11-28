@@ -7,6 +7,7 @@ import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import java.lang.annotation.Retention;
@@ -29,9 +30,15 @@ public class StatefulLayout extends ViewFlipper {
     private LayoutInflater layoutInflater;
 
     private View emptyView;
+    private TextView tvEmpty;
+
     private View contentView;
+
     private View loadingView;
+    private TextView tvLoading;
+
     private View errorView;
+    private TextView tvError;
 
     public StatefulLayout(Context context) {
         super(context);
@@ -102,29 +109,32 @@ public class StatefulLayout extends ViewFlipper {
 
     public void setEmptyView(View emptyView) {
         this.emptyView = emptyView;
+        tvEmpty = emptyView.findViewById(R.id.tvEmpty);
+        addView(emptyView, emptyView.getLayoutParams());
     }
 
     public void setEmptyView(@LayoutRes int emptyViewResId) {
-        emptyView = layoutInflater.inflate(emptyViewResId, this, false);
-        addView(emptyView, emptyView.getLayoutParams());
+        setEmptyView(layoutInflater.inflate(emptyViewResId, this, false));
     }
 
     public void setLoadingView(View loadingView) {
         this.loadingView = loadingView;
+        tvLoading = loadingView.findViewById(R.id.tvLoading);
+        addView(loadingView, loadingView.getLayoutParams());
     }
 
     public void setLoadingView(@LayoutRes int loadingViewResId) {
-        loadingView = layoutInflater.inflate(loadingViewResId, this, false);
-        addView(loadingView, loadingView.getLayoutParams());
+        setLoadingView(layoutInflater.inflate(loadingViewResId, this, false));
     }
 
     public void setErrorView(View errorView) {
         this.errorView = errorView;
+        tvError = errorView.findViewById(R.id.tvError);
+        addView(errorView, errorView.getLayoutParams());
     }
 
     public void setErrorView(@LayoutRes int errorViewResId) {
-        errorView = layoutInflater.inflate(errorViewResId, this, false);
-        addView(errorView, errorView.getLayoutParams());
+        setErrorView(layoutInflater.inflate(errorViewResId, this, false));
     }
 
     public void showContent() {
@@ -134,7 +144,10 @@ public class StatefulLayout extends ViewFlipper {
     }
 
     public void showEmpty(String message) {
-
+        if(tvEmpty != null) {
+            tvEmpty.setText(message);
+        }
+        showEmpty();
     }
 
     public void showEmpty() {
@@ -144,7 +157,10 @@ public class StatefulLayout extends ViewFlipper {
     }
 
     public void showLoading(String message) {
-
+        if(tvLoading != null) {
+            tvLoading.setText(message);
+        }
+        showLoading();
     }
 
     public void showLoading() {
@@ -154,7 +170,10 @@ public class StatefulLayout extends ViewFlipper {
     }
 
     public void showError(String message) {
-
+        if(tvError != null) {
+            tvError.setText(message);
+        }
+        showError();
     }
 
     public void showError() {
