@@ -3,4 +3,5 @@
     <string name="no_content">No content to show</string>
     <string name="loading">Loading&#8230;</string>
     <string name="error_occurred">An error occurred!</string>
+    <string name="retry">Retry</string>
 </resources>

@@ -3,4 +3,5 @@
     <string name="empty">EMPTY</string>
     <string name="loading">LOADING&#8230;</string>
     <string name="error">ERROR</string>
+    <string name="retrying">Retrying&#8230;</string>
 </resources>

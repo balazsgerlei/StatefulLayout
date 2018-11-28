@@ -20,8 +20,8 @@
         android:layout_height="match_parent"
         app:sl_emptyView="@layout/layout_error"
         app:sl_loadingView="@layout/layout_loading"
-        app:sl_errorView="@layout/layout_error"
-        app:sl_layoutState="content">
+        app:sl_errorView="@layout/sl_default_error_layout"
+        app:sl_layoutState="error">
 
         <TextView
             android:layout_width="match_parent"

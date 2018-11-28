@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.IntDef;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -39,6 +41,8 @@ public class StatefulLayout extends ViewFlipper {
 
     private View errorView;
     private TextView tvError;
+    private Button btnRetry;
+    private OnClickListener btnRetryListener;
 
     public StatefulLayout(Context context) {
         super(context);
@@ -107,14 +111,18 @@ public class StatefulLayout extends ViewFlipper {
         }
     }
 
+    public void setEmptyView(@LayoutRes int emptyViewResId) {
+        setEmptyView(layoutInflater.inflate(emptyViewResId, this, false));
+    }
+
     public void setEmptyView(View emptyView) {
         this.emptyView = emptyView;
         tvEmpty = emptyView.findViewById(R.id.tvEmpty);
         addView(emptyView, emptyView.getLayoutParams());
     }
 
-    public void setEmptyView(@LayoutRes int emptyViewResId) {
-        setEmptyView(layoutInflater.inflate(emptyViewResId, this, false));
+    public void setLoadingView(@LayoutRes int loadingViewResId) {
+        setLoadingView(layoutInflater.inflate(loadingViewResId, this, false));
     }
 
     public void setLoadingView(View loadingView) {
@@ -123,18 +131,16 @@ public class StatefulLayout extends ViewFlipper {
         addView(loadingView, loadingView.getLayoutParams());
     }
 
-    public void setLoadingView(@LayoutRes int loadingViewResId) {
-        setLoadingView(layoutInflater.inflate(loadingViewResId, this, false));
+    public void setErrorView(@LayoutRes int errorViewResId) {
+        setErrorView(layoutInflater.inflate(errorViewResId, this, false));
     }
 
     public void setErrorView(View errorView) {
         this.errorView = errorView;
         tvError = errorView.findViewById(R.id.tvError);
+        btnRetry = errorView.findViewById(R.id.btnRetry);
+        setRetryButtonOnClickListener(btnRetryListener);
         addView(errorView, errorView.getLayoutParams());
-    }
-
-    public void setErrorView(@LayoutRes int errorViewResId) {
-        setErrorView(layoutInflater.inflate(errorViewResId, this, false));
     }
 
     public void showContent() {
@@ -169,16 +175,43 @@ public class StatefulLayout extends ViewFlipper {
         }
     }
 
-    public void showError(String message) {
-        if(tvError != null) {
-            tvError.setText(message);
-        }
-        showError();
+    public void showErrorWithRetryButton(@Nullable OnClickListener listener) {
+        showErrorWithRetryButton(null, listener);
+    }
+
+    public void showErrorWithRetryButton(String message, @Nullable OnClickListener listener) {
+        setRetryButtonOnClickListener(listener);
+        showError(message, true);
     }
 
     public void showError() {
+        showError(null);
+    }
+
+    public void showError(String message) {
+        showError(message, false);
+    }
+
+    private void showError(String message, boolean displayRetryButton) {
+        if(tvError != null && message != null) {
+            tvError.setText(message);
+        }
+        if (btnRetry != null) {
+            if (displayRetryButton) {
+                btnRetry.setVisibility(VISIBLE);
+            } else {
+                btnRetry.setVisibility(GONE);
+            }
+        }
         if (errorView != null && indexOfChild(errorView) != -1) {
             setDisplayedChild(indexOfChild(errorView));
+        }
+    }
+
+    private void setRetryButtonOnClickListener(@Nullable OnClickListener listener) {
+        btnRetryListener = listener;
+        if (btnRetry != null) {
+            btnRetry.setOnClickListener(btnRetryListener);
         }
     }
 

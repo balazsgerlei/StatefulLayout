@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import hu.gerlotdev.statefullayout.StatefulLayout;
 
@@ -66,7 +67,13 @@ public class MainFragment extends Fragment {
         }
 
         statefulLayout = view.findViewById(R.id.statefulLayout);
-        statefulLayout.showError("ErrorRRR!");
+        statefulLayout.showErrorWithRetryButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.retrying), Toast.LENGTH_SHORT).show();
+            }
+        });
+        // statefulLayout.showError("ErrorRRR!");
         /*statefulLayout.setErrorView(R.layout.layout_error);
         statefulLayout.showError();
         statefulLayout.setLoadingView(R.layout.layout_loading);
