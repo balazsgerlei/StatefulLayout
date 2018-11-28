@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+    <hu.gerlotdev.statefullayout.StatefulLayout
+        android:id="@+id/statefulLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:sl_emptyView="@layout/layout_empty"
+        app:sl_loadingView="@layout/layout_loading"
+        app:sl_errorView="@layout/layout_error"
+        app:sl_layoutState="content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Content" />
+
+    </hu.gerlotdev.statefullayout.StatefulLayout>
+
+</LinearLayout>
