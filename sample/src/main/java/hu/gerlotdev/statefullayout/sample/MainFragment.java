@@ -66,6 +66,7 @@ public class MainFragment extends Fragment {
         }
 
         statefulLayout = view.findViewById(R.id.statefulLayout);
+        statefulLayout.showError("ErrorRRR!");
         /*statefulLayout.setErrorView(R.layout.layout_error);
         statefulLayout.showError();
         statefulLayout.setLoadingView(R.layout.layout_loading);

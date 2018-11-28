@@ -18,7 +18,7 @@
         android:id="@+id/statefulLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:sl_emptyView="@layout/layout_empty"
+        app:sl_emptyView="@layout/layout_error"
         app:sl_loadingView="@layout/layout_loading"
         app:sl_errorView="@layout/layout_error"
         app:sl_layoutState="content">

@@ -6,9 +6,9 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tvError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Error"
-        android:text="Error"/>
+        android:text="@string/error"/>
 
 </LinearLayout>
