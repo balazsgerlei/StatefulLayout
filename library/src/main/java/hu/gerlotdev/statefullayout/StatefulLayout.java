@@ -26,6 +26,8 @@ public class StatefulLayout extends ViewFlipper {
         int CONTENT = 3;
     }
 
+    private LayoutStateChangeListener onLayoutStateChangeListener;
+
     @LayoutState
     private int layoutState = LayoutState.CONTENT;
 
@@ -111,6 +113,10 @@ public class StatefulLayout extends ViewFlipper {
         }
     }
 
+    public void setOnLayoutStateChangeListener(LayoutStateChangeListener listener) {
+        this.onLayoutStateChangeListener = listener;
+    }
+
     public void setEmptyView(@LayoutRes int emptyViewResId) {
         setEmptyView(layoutInflater.inflate(emptyViewResId, this, false));
     }
@@ -146,6 +152,9 @@ public class StatefulLayout extends ViewFlipper {
     public void showContent() {
         if (contentView != null && indexOfChild(contentView) != -1) {
             setDisplayedChild(indexOfChild(contentView));
+            if (onLayoutStateChangeListener != null) {
+                onLayoutStateChangeListener.onLayoutStateChanged(LayoutState.CONTENT);
+            }
         }
     }
 
@@ -159,6 +168,9 @@ public class StatefulLayout extends ViewFlipper {
     public void showEmpty() {
         if (emptyView != null && indexOfChild(emptyView) != -1) {
             setDisplayedChild(indexOfChild(emptyView));
+            if (onLayoutStateChangeListener != null) {
+                onLayoutStateChangeListener.onLayoutStateChanged(LayoutState.EMPTY);
+            }
         }
     }
 
@@ -172,6 +184,9 @@ public class StatefulLayout extends ViewFlipper {
     public void showLoading() {
         if (loadingView != null && indexOfChild(loadingView) != -1) {
             setDisplayedChild(indexOfChild(loadingView));
+            if (onLayoutStateChangeListener != null) {
+                onLayoutStateChangeListener.onLayoutStateChanged(LayoutState.LOADING);
+            }
         }
     }
 
@@ -205,6 +220,9 @@ public class StatefulLayout extends ViewFlipper {
         }
         if (errorView != null && indexOfChild(errorView) != -1) {
             setDisplayedChild(indexOfChild(errorView));
+            if (onLayoutStateChangeListener != null) {
+                onLayoutStateChangeListener.onLayoutStateChanged(LayoutState.ERROR);
+            }
         }
     }
 

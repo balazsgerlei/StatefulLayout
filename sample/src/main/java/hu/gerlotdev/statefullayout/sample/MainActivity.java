@@ -25,4 +25,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
     public void setToolbarAsSupportActionBar(Toolbar toolbar) {
         setSupportActionBar(toolbar);
     }
+
+    @Override
+    public void setTitle(String title) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
+    }
 }

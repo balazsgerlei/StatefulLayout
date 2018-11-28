@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import hu.gerlotdev.statefullayout.LayoutStateChangeListener;
 import hu.gerlotdev.statefullayout.StatefulLayout;
 
 public class MainFragment extends Fragment {
@@ -30,6 +31,8 @@ public class MainFragment extends Fragment {
     public interface MainFragmentListener {
 
         void setToolbarAsSupportActionBar(Toolbar toolbar);
+
+        void setTitle(String title);
 
     }
 
@@ -87,6 +90,34 @@ public class MainFragment extends Fragment {
         spLayoutState = view.findViewById(R.id.spLayoutState);
         statefulLayout = view.findViewById(R.id.statefulLayout);
         statefulLayout.setInAnimation(getActivity(), android.R.anim.fade_in);
+
+        statefulLayout.setOnLayoutStateChangeListener(new LayoutStateChangeListener() {
+            @Override
+            public void onLayoutStateChanged(int newLayoutState) {
+                if (listener != null) {
+                    String title = getResources().getString(R.string.app_name);
+                    switch (newLayoutState) {
+                        case StatefulLayout.LayoutState.EMPTY:
+                            title = title + " - " + getResources().getString(R.string.empty_state);
+                            break;
+                        case StatefulLayout.LayoutState.LOADING:
+                            title = title + " - " + getResources().getString(R.string.loading_state);
+                            break;
+                        case StatefulLayout.LayoutState.ERROR:
+                            title = title + " - " + getResources().getString(R.string.error_state);
+                            break;
+                        case StatefulLayout.LayoutState.CONTENT:
+                            title = title + " - " + getResources().getString(R.string.content_state);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    listener.setTitle(title);
+                }
+
+            }
+        });
 
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.layout_states, android.R.layout.simple_spinner_item);
