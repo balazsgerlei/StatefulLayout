@@ -113,6 +113,10 @@ public class StatefulLayout extends ViewFlipper {
         }
     }
 
+    public @LayoutState int getLayoutState() {
+        return layoutState;
+    }
+
     public void setOnLayoutStateChangeListener(LayoutStateChangeListener listener) {
         this.onLayoutStateChangeListener = listener;
     }
