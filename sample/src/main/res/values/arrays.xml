@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="layout_states">
+        <item>@string/empty_state</item>
+        <item>@string/loading_state</item>
+        <item>@string/error_state</item>
+        <item>@string/content_state</item>
+    </string-array>
+
+</resources>

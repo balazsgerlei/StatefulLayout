@@ -150,7 +150,7 @@ public class StatefulLayout extends ViewFlipper {
     }
 
     public void showEmpty(String message) {
-        if(tvEmpty != null) {
+        if(tvEmpty != null && message != null) {
             tvEmpty.setText(message);
         }
         showEmpty();
@@ -163,7 +163,7 @@ public class StatefulLayout extends ViewFlipper {
     }
 
     public void showLoading(String message) {
-        if(tvLoading != null) {
+        if(tvLoading != null && message != null) {
             tvLoading.setText(message);
         }
         showLoading();

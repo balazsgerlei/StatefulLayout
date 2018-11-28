@@ -4,4 +4,13 @@
     <string name="loading">LOADING&#8230;</string>
     <string name="error">ERROR</string>
     <string name="retrying">Retrying&#8230;</string>
+    <string name="custom_message">Custom Message</string>
+    <string name="display_retry_button">Display retry\nbutton</string>
+
+    <!-- States -->
+    <string name="layout_state">Layout State:</string>
+    <string name="empty_state">Empty</string>
+    <string name="loading_state">Loading</string>
+    <string name="error_state">Error</string>
+    <string name="content_state">Content</string>
 </resources>
