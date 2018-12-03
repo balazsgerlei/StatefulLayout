@@ -1,11 +1,12 @@
 package hu.gerlotdev.statefullayout.sample;
 
 import android.content.Context;
-import android.net.Uri;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -43,6 +44,9 @@ public class MainFragment extends Fragment {
 
     private Spinner spLayoutState;
     private LinearLayout llSecondRow;
+    private TextInputLayout tilTitle;
+    private TextInputEditText etTitle;
+    private CheckBox cbDisplayImage;
     private TextInputEditText etMessage;
     private CheckBox cbDisplayRetryButton;
 
@@ -84,6 +88,11 @@ public class MainFragment extends Fragment {
         }
 
         llSecondRow = view.findViewById(R.id.llSecondRow);
+
+        tilTitle = view.findViewById(R.id.tilTitle);
+        etTitle = view.findViewById(R.id.etTitle);
+        cbDisplayImage = view.findViewById(R.id.cbDisplayImage);
+
         etMessage = view.findViewById(R.id.etMessage);
         cbDisplayRetryButton = view.findViewById(R.id.cbDisplayRetryButton);
 
@@ -135,6 +144,30 @@ public class MainFragment extends Fragment {
             }
         });
 
+        etTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                onLayoutStateSelected(spLayoutState.getSelectedItemPosition());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        cbDisplayImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onLayoutStateSelected(spLayoutState.getSelectedItemPosition());
+            }
+        });
+
         etMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -155,7 +188,7 @@ public class MainFragment extends Fragment {
         cbDisplayRetryButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                showError(isChecked);
+                onLayoutStateSelected(spLayoutState.getSelectedItemPosition());
             }
         });
     }
@@ -164,9 +197,17 @@ public class MainFragment extends Fragment {
         if (position != StatefulLayout.LayoutState.CONTENT) {
             llSecondRow.setVisibility(View.VISIBLE);
             if (position == StatefulLayout.LayoutState.ERROR) {
+                tilTitle.setVisibility(View.VISIBLE);
+                cbDisplayImage.setVisibility(View.VISIBLE);
                 cbDisplayRetryButton.setVisibility(View.VISIBLE);
             } else {
-                cbDisplayRetryButton.setVisibility(View.INVISIBLE);
+                tilTitle.setVisibility(View.GONE);
+                cbDisplayRetryButton.setVisibility(View.GONE);
+                if (position == StatefulLayout.LayoutState.EMPTY) {
+                    cbDisplayImage.setVisibility(View.VISIBLE);
+                } else {
+                    cbDisplayImage.setVisibility(View.GONE);
+                }
             }
         } else {
             llSecondRow.setVisibility(View.GONE);
@@ -175,10 +216,7 @@ public class MainFragment extends Fragment {
         String message = null;
         switch (position) {
             case StatefulLayout.LayoutState.EMPTY:
-                if (etMessage.getText() != null && !etMessage.getText().toString().isEmpty()) {
-                    message = etMessage.getText().toString();
-                }
-                statefulLayout.showEmpty(message);
+                showEmpty(cbDisplayImage.isChecked());
                 break;
             case StatefulLayout.LayoutState.LOADING:
                 if (etMessage.getText() != null && !etMessage.getText().toString().isEmpty()) {
@@ -187,7 +225,7 @@ public class MainFragment extends Fragment {
                 statefulLayout.showLoading(message);
                 break;
             case StatefulLayout.LayoutState.ERROR:
-                showError(cbDisplayRetryButton.isChecked());
+                showError(cbDisplayImage.isChecked(), cbDisplayRetryButton.isChecked());
                 break;
             default:
                 statefulLayout.showContent();
@@ -195,21 +233,41 @@ public class MainFragment extends Fragment {
         }
     }
 
-    private void showError(boolean displayRetryButton) {
+    private void showEmpty(boolean displayImage) {
+        Drawable image = null;
         String message = null;
+        if (displayImage) {
+            image = getResources().getDrawable(R.drawable.empty_icon);
+        }
+        if (etMessage.getText() != null && !etMessage.getText().toString().isEmpty()) {
+            message = etMessage.getText().toString();
+        }
+        statefulLayout.showEmpty(image, message);
+    }
+
+    private void showError(boolean displayImage, boolean displayRetryButton) {
+        String title = null;
+        String message = null;
+        Drawable errorImage = null;
+        if (displayImage) {
+            errorImage = getResources().getDrawable(R.drawable.error_icon);
+        }
+        if (etTitle.getText() != null && !etTitle.getText().toString().isEmpty()) {
+            title = etTitle.getText().toString();
+        }
         if (etMessage.getText() != null && !etMessage.getText().toString().isEmpty()) {
             message = etMessage.getText().toString();
         }
         if (spLayoutState.getSelectedItemPosition() == StatefulLayout.LayoutState.ERROR) {
             if (displayRetryButton) {
-                statefulLayout.showErrorWithRetryButton(message, new View.OnClickListener() {
+                statefulLayout.showErrorWithRetryButton(errorImage, title, message, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(getActivity(), getResources().getString(R.string.retrying), Toast.LENGTH_SHORT).show();
                     }
                 });
             } else {
-                statefulLayout.showError(message);
+                statefulLayout.showError(errorImage, title, message);
             }
         }
     }

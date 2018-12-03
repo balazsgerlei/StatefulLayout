@@ -2,6 +2,7 @@ package hu.gerlotdev.statefullayout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.IntDef;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -34,6 +36,7 @@ public class StatefulLayout extends ViewFlipper {
     private LayoutInflater layoutInflater;
 
     private View emptyView;
+    private ImageView ivEmpty;
     private TextView tvEmpty;
 
     private View contentView;
@@ -42,7 +45,9 @@ public class StatefulLayout extends ViewFlipper {
     private TextView tvLoading;
 
     private View errorView;
-    private TextView tvError;
+    private ImageView ivError;
+    private TextView tvErrorTitle;
+    private TextView tvErrorMessage;
     private Button btnRetry;
     private OnClickListener btnRetryListener;
 
@@ -127,6 +132,7 @@ public class StatefulLayout extends ViewFlipper {
 
     public void setEmptyView(View emptyView) {
         this.emptyView = emptyView;
+        ivEmpty = emptyView.findViewById(R.id.ivEmpty);
         tvEmpty = emptyView.findViewById(R.id.tvEmpty);
         addView(emptyView, emptyView.getLayoutParams());
     }
@@ -147,7 +153,9 @@ public class StatefulLayout extends ViewFlipper {
 
     public void setErrorView(View errorView) {
         this.errorView = errorView;
-        tvError = errorView.findViewById(R.id.tvError);
+        ivError = errorView.findViewById(R.id.ivError);
+        tvErrorTitle = errorView.findViewById(R.id.tvErrorTitle);
+        tvErrorMessage = errorView.findViewById(R.id.tvErrorMessage);
         btnRetry = errorView.findViewById(R.id.btnRetry);
         setRetryButtonOnClickListener(btnRetryListener);
         addView(errorView, errorView.getLayoutParams());
@@ -163,6 +171,16 @@ public class StatefulLayout extends ViewFlipper {
     }
 
     public void showEmpty(String message) {
+        showEmpty(null, message);
+    }
+
+    public void showEmpty(Drawable image, String message) {
+        if (image != null) {
+            ivEmpty.setImageDrawable(image);
+            ivEmpty.setVisibility(VISIBLE);
+        } else {
+            ivEmpty.setVisibility(GONE);
+        }
         if(tvEmpty != null && message != null) {
             tvEmpty.setText(message);
         }
@@ -199,21 +217,61 @@ public class StatefulLayout extends ViewFlipper {
     }
 
     public void showErrorWithRetryButton(String message, @Nullable OnClickListener listener) {
+        showErrorWithRetryButton(null, null, message, listener);
+    }
+
+    public void showErrorWithRetryButton(Drawable image, String message, @Nullable OnClickListener listener) {
+        showErrorWithRetryButton(image, null, message, listener);
+    }
+
+    public void showErrorWithRetryButton(String title, String message, @Nullable OnClickListener listener) {
+        showErrorWithRetryButton(null, title, message, listener);
+    }
+
+    public void showErrorWithRetryButton(Drawable image, String title, String message, @Nullable OnClickListener listener) {
         setRetryButtonOnClickListener(listener);
-        showError(message, true);
+        showError(image, title, message, true);
     }
 
     public void showError() {
         showError(null);
     }
 
-    public void showError(String message) {
-        showError(message, false);
+    public void showError(Drawable image, String title, String message) {
+        showError(image, title, message, false);
     }
 
-    private void showError(String message, boolean displayRetryButton) {
-        if(tvError != null && message != null) {
-            tvError.setText(message);
+    public void showError(String title, String message) {
+        showError(null, title, message, false);
+    }
+
+    public void showError(Drawable image, String message) {
+        showError(image, null, message, false);
+    }
+
+    public void showError(String message) {
+        showError(null, null, message, false);
+    }
+
+    private void showError(Drawable image, String title, String message, boolean displayRetryButton) {
+        if (ivError != null) {
+            if (image != null) {
+                ivError.setImageDrawable(image);
+                ivError.setVisibility(VISIBLE);
+            } else {
+                ivError.setVisibility(GONE);
+            }
+        }
+        if (tvErrorTitle != null) {
+            if (title != null) {
+                tvErrorTitle.setText(title);
+                tvErrorTitle.setVisibility(VISIBLE);
+            } else {
+                tvErrorTitle.setVisibility(GONE);
+            }
+        }
+        if(tvErrorMessage != null && message != null) {
+            tvErrorMessage.setText(message);
         }
         if (btnRetry != null) {
             if (displayRetryButton) {
