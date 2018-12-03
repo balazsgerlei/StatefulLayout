@@ -14,9 +14,11 @@
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.42000002">
 
         <ImageView
+            android:id="@+id/ivError"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -24,11 +26,19 @@
             android:tint="@android:color/secondary_text_dark" />
 
         <TextView
-            android:id="@+id/tvError"
+            android:id="@+id/tvErrorTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/error_occurred" />
+            android:text="@string/error_title"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvErrorMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/error_occurred_message" />
 
     </LinearLayout>
 
