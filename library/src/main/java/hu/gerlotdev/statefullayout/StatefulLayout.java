@@ -175,11 +175,13 @@ public class StatefulLayout extends ViewFlipper {
     }
 
     public void showEmpty(Drawable image, String message) {
-        if (image != null) {
-            ivEmpty.setImageDrawable(image);
-            ivEmpty.setVisibility(VISIBLE);
-        } else {
-            ivEmpty.setVisibility(GONE);
+        if (ivEmpty != null) {
+            if (image != null) {
+                ivEmpty.setImageDrawable(image);
+                ivEmpty.setVisibility(VISIBLE);
+            } else {
+                ivEmpty.setVisibility(GONE);
+            }
         }
         if(tvEmpty != null && message != null) {
             tvEmpty.setText(message);
