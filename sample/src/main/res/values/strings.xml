@@ -15,4 +15,5 @@
     <string name="loading_state">Loading</string>
     <string name="error_state">Error</string>
     <string name="content_state">Content</string>
+    <string name="content">Content</string>
 </resources>

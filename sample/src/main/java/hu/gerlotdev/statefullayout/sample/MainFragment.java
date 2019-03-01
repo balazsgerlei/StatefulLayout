@@ -50,6 +50,13 @@ public class MainFragment extends Fragment {
     private TextInputEditText etMessage;
     private CheckBox cbDisplayRetryButton;
 
+    private final StatefulLayout.DefaultStateConfig emptyStateConfig =
+            new StatefulLayout.DefaultStateConfig(StatefulLayout.LayoutState.EMPTY);
+    private final StatefulLayout.DefaultStateConfig loadingStateConfig =
+            new StatefulLayout.DefaultStateConfig(StatefulLayout.LayoutState.LOADING);
+    private final StatefulLayout.DefaultStateConfig contentStateConfig =
+            new StatefulLayout.DefaultStateConfig(StatefulLayout.LayoutState.CONTENT);
+
     public static MainFragment newInstance() {
         MainFragment fragment = new MainFragment();
         return fragment;
@@ -221,28 +228,34 @@ public class MainFragment extends Fragment {
             case StatefulLayout.LayoutState.LOADING:
                 if (etMessage.getText() != null && !etMessage.getText().toString().isEmpty()) {
                     message = etMessage.getText().toString();
+                } else {
+                    message = getString(R.string.loading);
                 }
-                statefulLayout.showLoading(message);
+                statefulLayout.applyStateConfig(loadingStateConfig.withMessage(message));
                 break;
             case StatefulLayout.LayoutState.ERROR:
                 showError(cbDisplayImage.isChecked(), cbDisplayRetryButton.isChecked());
                 break;
             default:
-                statefulLayout.showContent();
+                statefulLayout.applyStateConfig(contentStateConfig);
                 break;
         }
     }
 
     private void showEmpty(boolean displayImage) {
         Drawable image = null;
-        String message = null;
+        String message;
         if (displayImage) {
             image = getResources().getDrawable(R.drawable.empty_icon);
         }
         if (etMessage.getText() != null && !etMessage.getText().toString().isEmpty()) {
             message = etMessage.getText().toString();
+        } else {
+            message = getString(R.string.empty);
         }
-        statefulLayout.showEmpty(image, message);
+        statefulLayout.applyStateConfig(emptyStateConfig
+                .withImage(image)
+                .withMessage(message));
     }
 
     private void showError(boolean displayImage, boolean displayRetryButton) {
@@ -257,18 +270,24 @@ public class MainFragment extends Fragment {
         }
         if (etMessage.getText() != null && !etMessage.getText().toString().isEmpty()) {
             message = etMessage.getText().toString();
+        } else {
+            message = getString(R.string.error);
         }
         if (spLayoutState.getSelectedItemPosition() == StatefulLayout.LayoutState.ERROR) {
+            StatefulLayout.DefaultStateConfig configuredErrorStateConfig =
+                    new StatefulLayout.DefaultStateConfig(StatefulLayout.LayoutState.ERROR)
+                            .withImage(errorImage)
+                            .withTitle(title)
+                            .withMessage(message);
             if (displayRetryButton) {
-                statefulLayout.showErrorWithRetryButton(errorImage, title, message, new View.OnClickListener() {
+                configuredErrorStateConfig = configuredErrorStateConfig.withButton(getString(R.string.retry), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(getActivity(), getResources().getString(R.string.retrying), Toast.LENGTH_SHORT).show();
                     }
                 });
-            } else {
-                statefulLayout.showError(errorImage, title, message);
             }
+            statefulLayout.applyStateConfig(configuredErrorStateConfig);
         }
     }
 

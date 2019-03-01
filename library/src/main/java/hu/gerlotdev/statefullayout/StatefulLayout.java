@@ -141,6 +141,7 @@ public class StatefulLayout extends ViewFlipper {
         protected OnClickListener buttonClickListener;
 
         public DefaultStateConfig(@LayoutState int layoutState) {
+            this.layoutState = layoutState;
         }
 
         public DefaultStateConfig withTitle(String title) {
@@ -211,9 +212,12 @@ public class StatefulLayout extends ViewFlipper {
 
         protected void showError(StatefulLayout layout) {
             layout.btnRetryListener = buttonClickListener;
-            if (layout.btnRetry != null) {
+            if (layout.btnRetry != null && buttonTitle != null) {
                 layout.btnRetry.setOnClickListener(layout.btnRetryListener);
                 layout.btnRetry.setVisibility(VISIBLE);
+            } else {
+                layout.btnRetry.setOnClickListener(null);
+                layout.btnRetry.setVisibility(GONE);
             }
 
             if (layout.ivError != null) {
