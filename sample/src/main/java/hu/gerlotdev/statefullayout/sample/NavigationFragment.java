@@ -22,7 +22,7 @@ public class NavigationFragment extends Fragment {
 
     public interface NavigationFragmentListener {
 
-        void setToolbarAsSupportActionBar(Toolbar toolbar);
+        void setToolbarAsSupportActionBar(Toolbar toolbar, boolean displayHome);
 
         void setTitle(String title);
 
@@ -59,7 +59,7 @@ public class NavigationFragment extends Fragment {
 
         toolbar = view.findViewById(R.id.toolbar);
         if (listener != null) {
-            listener.setToolbarAsSupportActionBar(toolbar);
+            listener.setToolbarAsSupportActionBar(toolbar, false);
         }
 
         simpleBtn = view.findViewById(R.id.simpleBtn);

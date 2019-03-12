@@ -1,11 +1,13 @@
 package hu.gerlotdev.statefullayout.sample;
 
 import android.os.Build;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.Map;
@@ -37,8 +39,22 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void setToolbarAsSupportActionBar(Toolbar toolbar) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getSupportFragmentManager().popBackStack();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void setToolbarAsSupportActionBar(Toolbar toolbar, boolean displayHome) {
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(displayHome);
+            getSupportActionBar().setDisplayShowHomeEnabled(displayHome);
+        }
     }
 
     @Override

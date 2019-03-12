@@ -36,7 +36,7 @@ public class SimpleFragment extends Fragment {
 
     public interface SimpleFragmentListener {
 
-        void setToolbarAsSupportActionBar(Toolbar toolbar);
+        void setToolbarAsSupportActionBar(Toolbar toolbar, boolean displayHome);
 
         void setTitle(String title);
 
@@ -99,7 +99,7 @@ public class SimpleFragment extends Fragment {
 
         toolbar = view.findViewById(R.id.toolbar);
         if (listener != null) {
-            listener.setToolbarAsSupportActionBar(toolbar);
+            listener.setToolbarAsSupportActionBar(toolbar, true);
         }
 
         llSecondRow = view.findViewById(R.id.llSecondRow);

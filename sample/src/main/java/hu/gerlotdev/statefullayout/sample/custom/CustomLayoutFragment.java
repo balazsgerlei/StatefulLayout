@@ -22,7 +22,7 @@ public class CustomLayoutFragment extends Fragment {
 
     public interface CustomLayoutFragmentListener {
 
-        void setToolbarAsSupportActionBar(Toolbar toolbar);
+        void setToolbarAsSupportActionBar(Toolbar toolbar, boolean displayHome);
 
         void setTitle(String title);
 
@@ -72,7 +72,7 @@ public class CustomLayoutFragment extends Fragment {
 
         toolbar = view.findViewById(R.id.toolbar);
         if (listener != null) {
-            listener.setToolbarAsSupportActionBar(toolbar);
+            listener.setToolbarAsSupportActionBar(toolbar, true);
         }
 
     }
