@@ -1,7 +1,5 @@
 package hu.gerlotdev.statefullayout.sample;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
@@ -10,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 import hu.gerlotdev.statefullayout.sample.custom.CustomLayoutFragment;
 import hu.gerlotdev.statefullayout.sample.simple.SimpleFragment;
 
-public class SimpleActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationFragment.NavigationFragmentListener,
         SimpleFragment.SimpleFragmentListener,
         CustomLayoutFragment.CustomLayoutFragmentListener {
