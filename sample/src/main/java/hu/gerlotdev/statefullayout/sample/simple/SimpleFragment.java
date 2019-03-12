@@ -2,12 +2,16 @@ package hu.gerlotdev.statefullayout.sample.simple;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.transition.AutoTransition;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -72,6 +76,15 @@ public class SimpleFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         listener = null;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setSharedElementEnterTransition(new AutoTransition());
+            setSharedElementReturnTransition(new AutoTransition());
+        }
     }
 
     @Override
@@ -215,12 +228,12 @@ public class SimpleFragment extends Fragment {
             llSecondRow.setVisibility(View.GONE);
         }
 
-        String message = null;
         switch (position) {
             case StatefulLayout.LayoutState.EMPTY:
                 showEmpty(cbDisplayImage.isChecked());
                 break;
             case StatefulLayout.LayoutState.LOADING:
+                String message;
                 if (etMessage.getText() != null && !etMessage.getText().toString().isEmpty()) {
                     message = etMessage.getText().toString();
                 } else {

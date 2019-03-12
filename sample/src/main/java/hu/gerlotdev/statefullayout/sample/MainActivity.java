@@ -1,9 +1,14 @@
 package hu.gerlotdev.statefullayout.sample;
 
+import android.os.Build;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+
+import java.util.Map;
 
 import hu.gerlotdev.statefullayout.sample.custom.CustomLayoutFragment;
 import hu.gerlotdev.statefullayout.sample.simple.SimpleFragment;
@@ -44,21 +49,31 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void showSimple() {
-        getSupportFragmentManager()
-                .beginTransaction()
+    public void showSimple(Map<String, View> sharedElements) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            for (String key : sharedElements.keySet()) {
+                fragmentTransaction.addSharedElement(sharedElements.get(key), key);
+            }
+        }
+        fragmentTransaction
                 .addToBackStack(SimpleFragment.TAG)
-                .replace(R.id.fragment_container, SimpleFragment.newInstance(), SimpleFragment.TAG)
-                .commit();
+                .replace(R.id.fragment_container, SimpleFragment.newInstance(), SimpleFragment.TAG);
+        fragmentTransaction.commit();
     }
 
     @Override
-    public void showCustom() {
-        getSupportFragmentManager()
-                .beginTransaction()
+    public void showCustom(Map<String, View> sharedElements) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            for (String key : sharedElements.keySet()) {
+                fragmentTransaction.addSharedElement(sharedElements.get(key), key);
+            }
+        }
+        fragmentTransaction
                 .addToBackStack(CustomLayoutFragment.TAG)
-                .replace(R.id.fragment_container, CustomLayoutFragment.newInstance(), CustomLayoutFragment.TAG)
-                .commit();
+                .replace(R.id.fragment_container, CustomLayoutFragment.newInstance(), CustomLayoutFragment.TAG);
+        fragmentTransaction.commit();
     }
 
 

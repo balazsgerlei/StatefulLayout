@@ -1,15 +1,20 @@
 package hu.gerlotdev.statefullayout.sample;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class NavigationFragment extends Fragment {
 
@@ -21,14 +26,15 @@ public class NavigationFragment extends Fragment {
 
         void setTitle(String title);
 
-        void showSimple();
+        void showSimple(Map<String, View> sharedElements);
 
-        void showCustom();
+        void showCustom(Map<String, View> sharedElements);
 
     }
 
     private NavigationFragmentListener listener;
 
+    private AppBarLayout appBarLayout;
     private Toolbar toolbar;
     private Button simpleBtn;
     private Button customBtn;
@@ -48,6 +54,8 @@ public class NavigationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         listener.setTitle(getString(R.string.app_name));
+
+        appBarLayout = view.findViewById(R.id.appBarLayout);
 
         toolbar = view.findViewById(R.id.toolbar);
         if (listener != null) {
@@ -77,7 +85,11 @@ public class NavigationFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if (listener != null) {
-                listener.showSimple();
+                Map<String, View> sharedElements = new HashMap<>();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    sharedElements.put(appBarLayout.getTransitionName(), appBarLayout);
+                }
+                listener.showSimple(sharedElements);
             }
         }
     };
@@ -86,7 +98,11 @@ public class NavigationFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if (listener != null) {
-                listener.showCustom();
+                Map<String, View> sharedElements = new HashMap<>();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    sharedElements.put(appBarLayout.getTransitionName(), appBarLayout);
+                }
+                listener.showCustom(sharedElements);
             }
         }
     };
