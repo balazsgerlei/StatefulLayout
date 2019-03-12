@@ -1,4 +1,4 @@
-package hu.gerlotdev.statefullayout.sample;
+package hu.gerlotdev.statefullayout.sample.simple;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -24,12 +24,13 @@ import android.widget.Toast;
 
 import hu.gerlotdev.statefullayout.LayoutStateChangeListener;
 import hu.gerlotdev.statefullayout.StatefulLayout;
+import hu.gerlotdev.statefullayout.sample.R;
 
-public class MainFragment extends Fragment {
+public class SimpleFragment extends Fragment {
 
-    public static final String TAG = MainFragment.class.getSimpleName();
+    public static final String TAG = SimpleFragment.class.getSimpleName();
 
-    public interface MainFragmentListener {
+    public interface SimpleFragmentListener {
 
         void setToolbarAsSupportActionBar(Toolbar toolbar);
 
@@ -37,7 +38,7 @@ public class MainFragment extends Fragment {
 
     }
 
-    private MainFragmentListener listener;
+    private SimpleFragmentListener listener;
 
     private Toolbar toolbar;
     private StatefulLayout statefulLayout;
@@ -57,20 +58,14 @@ public class MainFragment extends Fragment {
     private final StatefulLayout.DefaultStateConfig contentStateConfig =
             new StatefulLayout.DefaultStateConfig(StatefulLayout.LayoutState.CONTENT);
 
-    public static MainFragment newInstance() {
-        MainFragment fragment = new MainFragment();
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public static SimpleFragment newInstance() {
+        return new SimpleFragment();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        listener = (MainFragmentListener) context;
+        listener = (SimpleFragmentListener) context;
     }
 
     @Override
@@ -82,7 +77,7 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        return inflater.inflate(R.layout.fragment_simple, container, false);
     }
 
     @Override
