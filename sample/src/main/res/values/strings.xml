@@ -9,10 +9,14 @@
     <string name="display_retry_button">Display retry\nbutton</string>
     <string name="display_error_image">Display image</string>
 
+    <string name="simple_layout">Simple layout</string>
+    <string name="custom_layout">Custom layout</string>
+
     <!-- States -->
     <string name="layout_state">Layout State:</string>
     <string name="empty_state">Empty</string>
     <string name="loading_state">Loading</string>
     <string name="error_state">Error</string>
     <string name="content_state">Content</string>
+    <string name="content">Content</string>
 </resources>

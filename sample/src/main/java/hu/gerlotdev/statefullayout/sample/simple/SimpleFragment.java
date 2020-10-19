@@ -1,13 +1,17 @@
-package hu.gerlotdev.statefullayout.sample;
+package hu.gerlotdev.statefullayout.sample.simple;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.transition.AutoTransition;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,20 +28,21 @@ import android.widget.Toast;
 
 import hu.gerlotdev.statefullayout.LayoutStateChangeListener;
 import hu.gerlotdev.statefullayout.StatefulLayout;
+import hu.gerlotdev.statefullayout.sample.R;
 
-public class MainFragment extends Fragment {
+public class SimpleFragment extends Fragment {
 
-    public static final String TAG = MainFragment.class.getSimpleName();
+    public static final String TAG = SimpleFragment.class.getSimpleName();
 
-    public interface MainFragmentListener {
+    public interface SimpleFragmentListener {
 
-        void setToolbarAsSupportActionBar(Toolbar toolbar);
+        void setToolbarAsSupportActionBar(Toolbar toolbar, boolean displayHome);
 
         void setTitle(String title);
 
     }
 
-    private MainFragmentListener listener;
+    private SimpleFragmentListener listener;
 
     private Toolbar toolbar;
     private StatefulLayout statefulLayout;
@@ -50,20 +55,21 @@ public class MainFragment extends Fragment {
     private TextInputEditText etMessage;
     private CheckBox cbDisplayRetryButton;
 
-    public static MainFragment newInstance() {
-        MainFragment fragment = new MainFragment();
-        return fragment;
-    }
+    private final StatefulLayout.DefaultStateConfig emptyStateConfig =
+            new StatefulLayout.DefaultStateConfig(StatefulLayout.LayoutState.EMPTY);
+    private final StatefulLayout.DefaultStateConfig loadingStateConfig =
+            new StatefulLayout.DefaultStateConfig(StatefulLayout.LayoutState.LOADING);
+    private final StatefulLayout.DefaultStateConfig contentStateConfig =
+            new StatefulLayout.DefaultStateConfig(StatefulLayout.LayoutState.CONTENT);
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public static SimpleFragment newInstance() {
+        return new SimpleFragment();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        listener = (MainFragmentListener) context;
+        listener = (SimpleFragmentListener) context;
     }
 
     @Override
@@ -73,9 +79,18 @@ public class MainFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setSharedElementEnterTransition(new AutoTransition());
+            setSharedElementReturnTransition(new AutoTransition());
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        return inflater.inflate(R.layout.fragment_simple, container, false);
     }
 
     @Override
@@ -84,7 +99,7 @@ public class MainFragment extends Fragment {
 
         toolbar = view.findViewById(R.id.toolbar);
         if (listener != null) {
-            listener.setToolbarAsSupportActionBar(toolbar);
+            listener.setToolbarAsSupportActionBar(toolbar, true);
         }
 
         llSecondRow = view.findViewById(R.id.llSecondRow);
@@ -213,36 +228,42 @@ public class MainFragment extends Fragment {
             llSecondRow.setVisibility(View.GONE);
         }
 
-        String message = null;
         switch (position) {
             case StatefulLayout.LayoutState.EMPTY:
                 showEmpty(cbDisplayImage.isChecked());
                 break;
             case StatefulLayout.LayoutState.LOADING:
+                String message;
                 if (etMessage.getText() != null && !etMessage.getText().toString().isEmpty()) {
                     message = etMessage.getText().toString();
+                } else {
+                    message = getString(R.string.loading);
                 }
-                statefulLayout.showLoading(message);
+                statefulLayout.applyStateConfig(loadingStateConfig.withMessage(message));
                 break;
             case StatefulLayout.LayoutState.ERROR:
                 showError(cbDisplayImage.isChecked(), cbDisplayRetryButton.isChecked());
                 break;
             default:
-                statefulLayout.showContent();
+                statefulLayout.applyStateConfig(contentStateConfig);
                 break;
         }
     }
 
     private void showEmpty(boolean displayImage) {
         Drawable image = null;
-        String message = null;
+        String message;
         if (displayImage) {
             image = getResources().getDrawable(R.drawable.empty_icon);
         }
         if (etMessage.getText() != null && !etMessage.getText().toString().isEmpty()) {
             message = etMessage.getText().toString();
+        } else {
+            message = getString(R.string.empty);
         }
-        statefulLayout.showEmpty(image, message);
+        statefulLayout.applyStateConfig(emptyStateConfig
+                .withImage(image)
+                .withMessage(message));
     }
 
     private void showError(boolean displayImage, boolean displayRetryButton) {
@@ -257,18 +278,24 @@ public class MainFragment extends Fragment {
         }
         if (etMessage.getText() != null && !etMessage.getText().toString().isEmpty()) {
             message = etMessage.getText().toString();
+        } else {
+            message = getString(R.string.error);
         }
         if (spLayoutState.getSelectedItemPosition() == StatefulLayout.LayoutState.ERROR) {
+            StatefulLayout.DefaultStateConfig configuredErrorStateConfig =
+                    new StatefulLayout.DefaultStateConfig(StatefulLayout.LayoutState.ERROR)
+                            .withImage(errorImage)
+                            .withTitle(title)
+                            .withMessage(message);
             if (displayRetryButton) {
-                statefulLayout.showErrorWithRetryButton(errorImage, title, message, new View.OnClickListener() {
+                configuredErrorStateConfig = configuredErrorStateConfig.withButton(getString(R.string.retry), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(getActivity(), getResources().getString(R.string.retrying), Toast.LENGTH_SHORT).show();
                     }
                 });
-            } else {
-                statefulLayout.showError(errorImage, title, message);
             }
+            statefulLayout.applyStateConfig(configuredErrorStateConfig);
         }
     }
 

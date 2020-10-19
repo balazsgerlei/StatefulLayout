@@ -1,12 +1,29 @@
 package hu.gerlotdev.statefullayout.sample;
 
+import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.MainFragmentListener {
+import java.util.Map;
+
+import hu.gerlotdev.statefullayout.sample.custom.CustomLayoutFragment;
+import hu.gerlotdev.statefullayout.sample.simple.SimpleFragment;
+
+public class MainActivity extends AppCompatActivity
+        implements NavigationFragment.NavigationFragmentListener,
+        SimpleFragment.SimpleFragmentListener,
+        CustomLayoutFragment.CustomLayoutFragmentListener {
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,16 +31,30 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, MainFragment.newInstance(), MainFragment.TAG);
-            fragmentTransaction.commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, NavigationFragment.newInstance(), NavigationFragment.TAG)
+                    .commit();
         }
     }
 
     @Override
-    public void setToolbarAsSupportActionBar(Toolbar toolbar) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getSupportFragmentManager().popBackStack();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void setToolbarAsSupportActionBar(Toolbar toolbar, boolean displayHome) {
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(displayHome);
+            getSupportActionBar().setDisplayShowHomeEnabled(displayHome);
+        }
     }
 
     @Override
@@ -32,4 +63,34 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
             getSupportActionBar().setTitle(title);
         }
     }
+
+    @Override
+    public void showSimple(Map<String, View> sharedElements) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            for (String key : sharedElements.keySet()) {
+                fragmentTransaction.addSharedElement(sharedElements.get(key), key);
+            }
+        }
+        fragmentTransaction
+                .addToBackStack(SimpleFragment.TAG)
+                .replace(R.id.fragment_container, SimpleFragment.newInstance(), SimpleFragment.TAG);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void showCustom(Map<String, View> sharedElements) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            for (String key : sharedElements.keySet()) {
+                fragmentTransaction.addSharedElement(sharedElements.get(key), key);
+            }
+        }
+        fragmentTransaction
+                .addToBackStack(CustomLayoutFragment.TAG)
+                .replace(R.id.fragment_container, CustomLayoutFragment.newInstance(), CustomLayoutFragment.TAG);
+        fragmentTransaction.commit();
+    }
+
+
 }

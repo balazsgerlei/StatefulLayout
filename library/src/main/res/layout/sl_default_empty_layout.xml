@@ -15,13 +15,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/ivEmpty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/empty_icon"
-            android:tint="@android:color/secondary_text_dark" />
+            app:tint="@android:color/secondary_text_dark" />
 
         <TextView
             android:id="@+id/tvEmpty"
