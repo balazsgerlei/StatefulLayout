@@ -19,8 +19,7 @@ import org.junit.runner.RunWith;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        final Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         assertEquals("hu.gerlotdev.statefullayout.sample", appContext.getPackageName());
     }
