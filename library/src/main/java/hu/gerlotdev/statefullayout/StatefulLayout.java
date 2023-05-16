@@ -267,25 +267,27 @@ public class StatefulLayout extends ViewFlipper {
         super(context, attrs);
         layoutInflater = LayoutInflater.from(getContext());
 
-        final TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.StatefulLayout);
+        final TypedArray styledAttributes = getContext().obtainStyledAttributes(attrs, R.styleable.StatefulLayout);
 
-        int emptyViewResId = typedArray.getResourceId(R.styleable.StatefulLayout_sl_emptyView, -1);
+        int emptyViewResId = styledAttributes.getResourceId(R.styleable.StatefulLayout_sl_emptyView, -1);
         if (emptyViewResId > -1) {
             setEmptyView(emptyViewResId);
         }
 
-        int loadingViewResId = typedArray.getResourceId(R.styleable.StatefulLayout_sl_loadingView, -1);
+        int loadingViewResId = styledAttributes.getResourceId(R.styleable.StatefulLayout_sl_loadingView, -1);
         if (loadingViewResId > -1) {
             setLoadingView(loadingViewResId);
         }
 
-        int errorViewResId = typedArray.getResourceId(R.styleable.StatefulLayout_sl_errorView, -1);
+        int errorViewResId = styledAttributes.getResourceId(R.styleable.StatefulLayout_sl_errorView, -1);
         if (errorViewResId > -1) {
             setErrorView(errorViewResId);
         }
 
-        int stateIndex = typedArray.getInt(R.styleable.StatefulLayout_sl_layoutState, LayoutState.CONTENT.index);
+        int stateIndex = styledAttributes.getInt(R.styleable.StatefulLayout_sl_layoutState, LayoutState.CONTENT.index);
         layoutState = LayoutState.fromIndex(stateIndex);
+
+        styledAttributes.recycle();
     }
 
     @Override
