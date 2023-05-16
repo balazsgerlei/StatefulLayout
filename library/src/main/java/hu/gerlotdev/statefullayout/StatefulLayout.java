@@ -26,11 +26,11 @@ public class StatefulLayout extends ViewFlipper {
 
         public final int index;
 
-        LayoutState(int index) {
+        LayoutState(final int index) {
             this.index = index;
         }
 
-        public static LayoutState fromIndex(int index) {
+        public static LayoutState fromIndex(final int index) {
             switch (index) {
                 case EMPTY_STATE_INDEX: return LayoutState.EMPTY;
                 case LOADING_STATE_INDEX: return LayoutState.LOADING;
@@ -45,7 +45,7 @@ public class StatefulLayout extends ViewFlipper {
 
     private LayoutState layoutState = LayoutState.CONTENT;
 
-    private LayoutInflater layoutInflater;
+    private final LayoutInflater layoutInflater;
 
     private View emptyView;
     private ImageView ivEmpty;
@@ -77,7 +77,7 @@ public class StatefulLayout extends ViewFlipper {
         public LayoutConfig() {
         }
 
-        public LayoutConfig withEmptyView(int emptyViewResId) {
+        public LayoutConfig withEmptyView(final int emptyViewResId) {
             if (emptyViewResId == -1) {
                 return this;
             }
@@ -88,7 +88,7 @@ public class StatefulLayout extends ViewFlipper {
             return this;
         }
 
-        public LayoutConfig withEmptyView(View emptyView) {
+        public LayoutConfig withEmptyView(final View emptyView) {
             if (emptyViewResId != -1) {
                 emptyViewResId = -1;
             }
@@ -96,7 +96,7 @@ public class StatefulLayout extends ViewFlipper {
             return this;
         }
 
-        public LayoutConfig withLoadingView(int loadingViewResId) {
+        public LayoutConfig withLoadingView(final int loadingViewResId) {
             if (loadingViewResId == -1) {
                 return this;
             }
@@ -107,7 +107,7 @@ public class StatefulLayout extends ViewFlipper {
             return this;
         }
 
-        public LayoutConfig withLoadingView(View loadingView) {
+        public LayoutConfig withLoadingView(final View loadingView) {
             if (loadingViewResId != -1) {
                 loadingViewResId = -1;
             }
@@ -115,7 +115,7 @@ public class StatefulLayout extends ViewFlipper {
             return this;
         }
 
-        public LayoutConfig withErrorView(int errorViewResId) {
+        public LayoutConfig withErrorView(final int errorViewResId) {
             if (errorViewResId == -1) {
                 return this;
             }
@@ -126,7 +126,7 @@ public class StatefulLayout extends ViewFlipper {
             return this;
         }
 
-        public LayoutConfig withErrorView(View errorView) {
+        public LayoutConfig withErrorView(final View errorView) {
             if (errorViewResId != -1) {
                 errorViewResId = -1;
             }
@@ -138,39 +138,39 @@ public class StatefulLayout extends ViewFlipper {
 
     public interface StateConfig {
 
-        void configureLayout(StatefulLayout layout);
+        void configureLayout(final StatefulLayout layout);
 
     }
 
     public static class DefaultStateConfig implements StateConfig {
 
-        protected LayoutState layoutState;
+        protected final LayoutState layoutState;
         protected String title;
         protected String message;
         protected Drawable image;
         protected String buttonTitle;
         protected OnClickListener buttonClickListener;
 
-        public DefaultStateConfig(LayoutState layoutState) {
+        public DefaultStateConfig(final LayoutState layoutState) {
             this.layoutState = layoutState;
         }
 
-        public DefaultStateConfig withTitle(String title) {
+        public DefaultStateConfig withTitle(final String title) {
             this.title = title;
             return this;
         }
 
-        public DefaultStateConfig withMessage(String message) {
+        public DefaultStateConfig withMessage(final String message) {
             this.message = message;
             return this;
         }
 
-        public DefaultStateConfig withImage(Drawable image) {
+        public DefaultStateConfig withImage(final Drawable image) {
             this.image = image;
             return this;
         }
 
-        public DefaultStateConfig withButton(String buttonTitle, OnClickListener listener) {
+        public DefaultStateConfig withButton(final String buttonTitle, final OnClickListener listener) {
             this.buttonTitle = buttonTitle;
             this.buttonClickListener = listener;
             return this;
@@ -178,7 +178,7 @@ public class StatefulLayout extends ViewFlipper {
 
         // TODO assert correct config!
         @Override
-        public void configureLayout(StatefulLayout layout) {
+        public void configureLayout(final StatefulLayout layout) {
             switch (layoutState) {
                 case EMPTY:
                     showEmpty(layout);
@@ -195,11 +195,11 @@ public class StatefulLayout extends ViewFlipper {
             }
         }
 
-        protected void showContent(StatefulLayout layout) {
+        protected void showContent(final StatefulLayout layout) {
             layout.displayLayoutAndNotifyListener(layout.contentView, LayoutState.CONTENT);
         }
 
-        protected void showEmpty(StatefulLayout layout) {
+        protected void showEmpty(final StatefulLayout layout) {
             if (layout.ivEmpty != null) {
                 if (image != null) {
                     layout.ivEmpty.setImageDrawable(image);
@@ -214,14 +214,14 @@ public class StatefulLayout extends ViewFlipper {
             layout.displayLayoutAndNotifyListener(layout.emptyView, LayoutState.EMPTY);
         }
 
-        protected void showLoading(StatefulLayout layout) {
+        protected void showLoading(final StatefulLayout layout) {
             if(layout.tvLoading != null && message != null) {
                 layout.tvLoading.setText(message);
             }
             layout.displayLayoutAndNotifyListener(layout.loadingView, LayoutState.LOADING);
         }
 
-        protected void showError(StatefulLayout layout) {
+        protected void showError(final StatefulLayout layout) {
             layout.btnRetryListener = buttonClickListener;
             if (layout.btnRetry != null) {
                 if (buttonTitle != null) {
@@ -258,16 +258,16 @@ public class StatefulLayout extends ViewFlipper {
 
     }
 
-    public StatefulLayout(Context context) {
+    public StatefulLayout(final Context context) {
         super(context);
         layoutInflater = LayoutInflater.from(getContext());
     }
 
-    public StatefulLayout(Context context, AttributeSet attrs) {
+    public StatefulLayout(final Context context, final AttributeSet attrs) {
         super(context, attrs);
         layoutInflater = LayoutInflater.from(getContext());
 
-        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.StatefulLayout);
+        final TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.StatefulLayout);
 
         int emptyViewResId = typedArray.getResourceId(R.styleable.StatefulLayout_sl_emptyView, -1);
         if (emptyViewResId > -1) {
@@ -316,11 +316,11 @@ public class StatefulLayout extends ViewFlipper {
         return layoutState;
     }
 
-    public void setOnLayoutStateChangeListener(LayoutStateChangeListener listener) {
+    public void setOnLayoutStateChangeListener(final LayoutStateChangeListener listener) {
         this.onLayoutStateChangeListener = listener;
     }
 
-    public void applyLayoutConfig(LayoutConfig config) {
+    public void applyLayoutConfig(final LayoutConfig config) {
         if (config.emptyView != null) {
             setEmptyView(config.emptyView);
         } else if (config.emptyViewResId != -1) {
@@ -340,17 +340,17 @@ public class StatefulLayout extends ViewFlipper {
         }
     }
 
-    public void applyStateConfig(StateConfig stateConfig) {
+    public void applyStateConfig(final StateConfig stateConfig) {
         stateConfig.configureLayout(this);
     }
 
     @Deprecated
-    public void setEmptyView(int emptyViewResId) {
+    public void setEmptyView(final int emptyViewResId) {
         setEmptyView(layoutInflater.inflate(emptyViewResId, this, false));
     }
 
     @Deprecated
-    public void setEmptyView(View emptyView) {
+    public void setEmptyView(final View emptyView) {
         this.emptyView = emptyView;
         ivEmpty = emptyView.findViewById(R.id.ivEmpty);
         tvEmpty = emptyView.findViewById(R.id.tvEmpty);
@@ -358,24 +358,24 @@ public class StatefulLayout extends ViewFlipper {
     }
 
     @Deprecated
-    public void setLoadingView(int loadingViewResId) {
+    public void setLoadingView(final int loadingViewResId) {
         setLoadingView(layoutInflater.inflate(loadingViewResId, this, false));
     }
 
     @Deprecated
-    public void setLoadingView(View loadingView) {
+    public void setLoadingView(final View loadingView) {
         this.loadingView = loadingView;
         tvLoading = loadingView.findViewById(R.id.tvLoading);
         addView(loadingView, loadingView.getLayoutParams());
     }
 
     @Deprecated
-    public void setErrorView(int errorViewResId) {
+    public void setErrorView(final int errorViewResId) {
         setErrorView(layoutInflater.inflate(errorViewResId, this, false));
     }
 
     @Deprecated
-    public void setErrorView(View errorView) {
+    public void setErrorView(final View errorView) {
         this.errorView = errorView;
         ivError = errorView.findViewById(R.id.ivError);
         tvErrorTitle = errorView.findViewById(R.id.tvErrorTitle);
@@ -391,12 +391,12 @@ public class StatefulLayout extends ViewFlipper {
     }
 
     @Deprecated
-    public void showEmpty(String message) {
+    public void showEmpty(final String message) {
         showEmpty(null, message);
     }
 
     @Deprecated
-    public void showEmpty(Drawable image, String message) {
+    public void showEmpty(final Drawable image, final String message) {
         if (ivEmpty != null) {
             if (image != null) {
                 ivEmpty.setImageDrawable(image);
@@ -417,7 +417,7 @@ public class StatefulLayout extends ViewFlipper {
     }
 
     @Deprecated
-    public void showLoading(String message) {
+    public void showLoading(final String message) {
         if(tvLoading != null && message != null) {
             tvLoading.setText(message);
         }
@@ -430,27 +430,27 @@ public class StatefulLayout extends ViewFlipper {
     }
 
     @Deprecated
-    public void showErrorWithRetryButton(OnClickListener listener) {
+    public void showErrorWithRetryButton(final OnClickListener listener) {
         showErrorWithRetryButton(null, listener);
     }
 
     @Deprecated
-    public void showErrorWithRetryButton(String message, OnClickListener listener) {
+    public void showErrorWithRetryButton(final String message, final OnClickListener listener) {
         showErrorWithRetryButton(null, null, message, listener);
     }
 
     @Deprecated
-    public void showErrorWithRetryButton(Drawable image, String message, OnClickListener listener) {
+    public void showErrorWithRetryButton(final Drawable image, final String message, final OnClickListener listener) {
         showErrorWithRetryButton(image, null, message, listener);
     }
 
     @Deprecated
-    public void showErrorWithRetryButton(String title, String message, OnClickListener listener) {
+    public void showErrorWithRetryButton(final String title, final String message, final OnClickListener listener) {
         showErrorWithRetryButton(null, title, message, listener);
     }
 
     @Deprecated
-    public void showErrorWithRetryButton(Drawable image, String title, String message, OnClickListener listener) {
+    public void showErrorWithRetryButton(final Drawable image, final String title, final String message, final OnClickListener listener) {
         setRetryButtonOnClickListener(listener);
         showError(image, title, message, true);
     }
@@ -461,27 +461,27 @@ public class StatefulLayout extends ViewFlipper {
     }
 
     @Deprecated
-    public void showError(Drawable image, String title, String message) {
+    public void showError(final Drawable image, final String title, final String message) {
         showError(image, title, message, false);
     }
 
     @Deprecated
-    public void showError(String title, String message) {
+    public void showError(final String title, final String message) {
         showError(null, title, message, false);
     }
 
     @Deprecated
-    public void showError(Drawable image, String message) {
+    public void showError(final Drawable image, final String message) {
         showError(image, null, message, false);
     }
 
     @Deprecated
-    public void showError(String message) {
+    public void showError(final String message) {
         showError(null, null, message, false);
     }
 
     @Deprecated
-    private void showError(Drawable image, String title, String message, boolean displayRetryButton) {
+    private void showError(final Drawable image, final String title, final String message, final boolean displayRetryButton) {
         if (ivError != null) {
             if (image != null) {
                 ivError.setImageDrawable(image);
@@ -512,7 +512,7 @@ public class StatefulLayout extends ViewFlipper {
     }
 
     @Deprecated
-    private void setRetryButtonOnClickListener(OnClickListener listener) {
+    private void setRetryButtonOnClickListener(final OnClickListener listener) {
         btnRetryListener = listener;
         if (btnRetry != null) {
             btnRetry.setOnClickListener(btnRetryListener);
@@ -533,7 +533,7 @@ public class StatefulLayout extends ViewFlipper {
         return getChildCount() == expectedChildCount;
     }
 
-    private void displayLayoutAndNotifyListener(View view, LayoutState layoutState) {
+    private void displayLayoutAndNotifyListener(final View view, final LayoutState layoutState) {
         if (view != null && indexOfChild(view) != -1) {
             setDisplayedChild(indexOfChild(view));
             if (onLayoutStateChangeListener != null) {
