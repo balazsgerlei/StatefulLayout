@@ -1,6 +1,5 @@
 package hu.gerlotdev.statefullayout.sample;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,9 +66,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void showSimple(Map<String, View> sharedElements) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            for (String key : sharedElements.keySet()) {
-                fragmentTransaction.addSharedElement(sharedElements.get(key), key);
+        for (String key : sharedElements.keySet()) {
+            final View sharedElement = sharedElements.get(key);
+            if (sharedElement != null) {
+                fragmentTransaction.addSharedElement(sharedElement, key);
             }
         }
         fragmentTransaction
@@ -81,9 +81,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void showCustom(Map<String, View> sharedElements) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            for (String key : sharedElements.keySet()) {
-                fragmentTransaction.addSharedElement(sharedElements.get(key), key);
+        for (String key : sharedElements.keySet()) {
+            final View sharedElement = sharedElements.get(key);
+            if (sharedElement != null) {
+                fragmentTransaction.addSharedElement(sharedElement, key);
             }
         }
         fragmentTransaction

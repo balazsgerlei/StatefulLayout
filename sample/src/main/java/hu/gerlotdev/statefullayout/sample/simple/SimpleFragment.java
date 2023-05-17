@@ -2,7 +2,6 @@ package hu.gerlotdev.statefullayout.sample.simple;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -81,10 +80,8 @@ public class SimpleFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setSharedElementEnterTransition(new AutoTransition());
-            setSharedElementReturnTransition(new AutoTransition());
-        }
+        setSharedElementEnterTransition(new AutoTransition());
+        setSharedElementReturnTransition(new AutoTransition());
     }
 
     @Override
