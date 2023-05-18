@@ -1,11 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace 'dev.gerlot.statefullayout.sample'
     compileSdkVersion 33
     buildToolsVersion "33.0.2"
 
     defaultConfig {
-        applicationId "hu.gerlotdev.statefullayout.sample"
+        applicationId "dev.gerlot.statefullayout.sample"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 1
@@ -22,7 +23,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
-    namespace 'hu.gerlotdev.statefullayout.sample'
 }
 
 dependencies {
