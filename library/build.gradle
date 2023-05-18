@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 
 android {
+    namespace 'dev.gerlot.statefullayout'
     compileSdkVersion 33
     buildToolsVersion "33.0.2"
 
@@ -21,7 +22,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
-    namespace 'hu.gerlotdev.statefullayout'
 
 }
 
@@ -38,7 +38,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'dev.gerlot'
                 artifactId = 'statefullayout'
-                version = '1.0.0-alpha05'
+                version = '1.0.0-alpha06'
             }
         }
     }
