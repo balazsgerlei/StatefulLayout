@@ -2,15 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     namespace 'dev.gerlot.statefullayout.sample'
-    compileSdkVersion 33
-    buildToolsVersion "33.0.2"
+    compileSdkVersion 35
 
     defaultConfig {
         applicationId "dev.gerlot.statefullayout.sample"
         minSdkVersion 21
-        targetSdkVersion 33
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 35
+        versionCode 7
+        versionName "1.0.0-alpha07"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {

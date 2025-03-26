@@ -3,12 +3,11 @@ apply plugin: 'maven-publish'
 
 android {
     namespace 'dev.gerlot.statefullayout'
-    compileSdkVersion 33
-    buildToolsVersion "33.0.2"
+    compileSdkVersion 35
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 35
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
@@ -21,6 +20,13 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
     }
 
 }
@@ -38,7 +44,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'dev.gerlot'
                 artifactId = 'statefullayout'
-                version = '1.0.0-alpha06'
+                version = '1.0.0-alpha07'
             }
         }
     }
