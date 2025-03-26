@@ -44,7 +44,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'dev.gerlot'
                 artifactId = 'statefullayout'
-                version = '1.0.0-alpha06'
+                version = '1.0.0-alpha07'
             }
         }
     }
