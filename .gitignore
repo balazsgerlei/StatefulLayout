@@ -361,6 +361,8 @@ obj/
 .idea/androidTestResultsUserPreferences.xml
 .idea/deploymentTargetDropDown.xml
 .idea/deploymentTargetSelector.xml
+.idea/other.xml
+.idea/runConfigurations.xml
 
 # Legacy Eclipse project files
 .cproject
